@@ -44,10 +44,49 @@ function operate(operator, num1, num2) {
     }
 }
 
+function setUp(arr) {
+    const OPERATORS = ["+", "-", "*", "/"]
+    if (OPERATORS.includes(arr[0]))
+        return "SYNTAX ERROR";
+    // idea is to take curr left operand
+    // check for operator
+    // check and use right operand
+}
+
 const screenText = document.querySelector(".screen");
-screenText.addEventListener("click", (event) => {
+const calcBtn = document.querySelector(".bottom");
+
+calcBtn.addEventListener("click", (event) => {
     let choice = `${event.target.id}`;
     switch (choice) {
-        
+        case "multiply":
+            choice = " *";
+            break;
+        case "divide":
+            choice = " /";
+            break;
+        case "add":
+            choice = " +";
+            break;
+        case "subtract":
+            choice = " -";
+            break;
+        case "equal":
+            choice = ""
+            break;
+        case "dot":
+            choice = "."
+            break;
+        case "sign":
+            choice = "-"
+            break;
+        default:
+            choice = ` ${choice}`
+    }
+    
+    if (choice === " clear")
+        screenText.textContent = "";
+    else {
+        screenText.textContent += choice;
     }
 });

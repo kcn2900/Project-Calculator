@@ -9,9 +9,13 @@
 }
 
 .screen {
-    padding: 10px 150px;
+    width: 400px;
+    height: 40px;
     background-color: white;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bottom {
