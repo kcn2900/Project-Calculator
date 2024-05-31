@@ -19,10 +19,9 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-        // const argArr = Array.from(arguments);
-        // // console.log(argArr)
-        // return argArr.reduce((total, curr) => total / curr, 1);
-        return a / b;
+        const argArr = Array.from(arguments);
+        // console.log(argArr)
+        return argArr.reduce((total, curr) => total / curr);
 }
 
 function operate(operator, num1, num2) {
@@ -44,3 +43,11 @@ function operate(operator, num1, num2) {
 
     }
 }
+
+const screenText = document.querySelector(".screen");
+screenText.addEventListener("click", (event) => {
+    let choice = `${event.target.id}`;
+    switch (choice) {
+        
+    }
+});

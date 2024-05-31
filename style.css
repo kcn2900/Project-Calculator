@@ -1,4 +1,46 @@
 .calculator {
     display: flex;
-    
+    background-color: gray;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.screen {
+    padding: 10px 150px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.bottom {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+}
+
+.digits {
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 240px;
+    background-color: pink;
+}
+
+.digits button {
+    width: 80px;
+    height: 80px;
+}
+
+.operators {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.operators button {
+    padding: 10px;
+    font-size: 16px;
 }
