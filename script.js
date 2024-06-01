@@ -15,7 +15,7 @@ function subtract(a ,b) {
 function multiply(a, b) {
     const argArr = Array.from(arguments);
     // console.log(argArr)
-    return argArr.reduce((total, curr) => total * curr, 0);
+    return argArr.reduce((total, curr) => total * curr);
 }
 
 function divide(a, b) {
@@ -27,30 +27,42 @@ function divide(a, b) {
 function operate(operator, num1, num2) {
     switch (operator) {
         case "+":
-            add(num1, num2);
-            break;
+            return add(num1, num2);
         case "-":
-            subtract(num1, num2);
-            break;
+            return subtract(num1, num2);
         case "*":
-            multiply(num1, num2);
-            break;
+            return multiply(num1, num2);
         case "/":
-            divide(num1, num2);
-            break;
+            return divide(num1, num2);
         default:
-            add(num1, num2);
-
+            return add(num1, num2);
     }
 }
 
 function setUp(arr) {
-    const OPERATORS = ["+", "-", "*", "/"]
-    if (OPERATORS.includes(arr[0]))
+    console.log(arr);
+    arr = arr.filter((item) => item !== "" && item !== "\n");
+    console.log(arr);
+    const OPERATORS = ["+", "-", "*", "/"];
+    if (OPERATORS.includes(arr[0]) || (!Array.isArray(arr) || !arr.length))
         return "SYNTAX ERROR";
-    // idea is to take curr left operand
-    // check for operator
-    // check and use right operand
+    let left = +arr[0];
+    let currOperator = "";
+    for (let i = 1; i < arr.length; i++) {
+        // i+2 < arr.length
+        // grab operator, grab rhs, return to lhs
+        if (i % 2 !== 0) {
+            currOperator = arr[i];
+        }
+        else {
+            let right = +arr[i];
+            console.log(`left: ${left}, \nright: ${right}, \nop: ${currOperator}
+            \ntype-left: ${typeof left}, \ntype-right: ${typeof right}`)
+            left = operate(currOperator, left, right);
+            // console.log(left)
+        }
+    }
+    return left;
 }
 
 const screenText = document.querySelector(".screen");
@@ -73,7 +85,9 @@ calcBtn.addEventListener("click", (event) => {
             break;
         case "equal":
             choice = ""
-            break;
+            // console.log(setUp(screenText.textContent.split(" ")));
+            screenText.textContent = setUp(screenText.textContent.split(" "));
+            return;
         case "dot":
             choice = "."
             break;
