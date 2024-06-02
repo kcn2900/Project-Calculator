@@ -1,15 +1,13 @@
 function add(a, b) {
-    function add(a, b) {
-        const argArr = Array.from(arguments);
-        // console.log(argArr)
-        return argArr.reduce((total, curr) => total + curr, 0);
-    }
+    const argArr = Array.from(arguments);
+    // console.log(argArr)
+    return argArr.reduce((total, curr) => total + curr);
 }
 
 function subtract(a ,b) {
     const argArr = Array.from(arguments);
     // console.log(argArr)
-    return argArr.reduce((total, curr) => total - curr, 0);
+    return argArr.reduce((total, curr) => total - curr);
 }
 
 function multiply(a, b) {
@@ -47,30 +45,40 @@ function setUp(arr) {
     if (OPERATORS.includes(arr[0]) || (!Array.isArray(arr) || !arr.length)
     || arr.length < 3)
         return "SYNTAX ERROR";
-    let left = +arr[0];
-    let currOperator = "";
-    for (let i = 1; i < arr.length; i++) {
-        // i+2 < arr.length
-        // grab operator, grab rhs, return to lhs
-        if (i % 2 !== 0) {
-            currOperator = arr[i];
-        }
-        else {
-            let right = +arr[i];
-            console.log(`left: ${left}, \nright: ${right}, \nop: ${currOperator}
-            \ntype-left: ${typeof left}, \ntype-right: ${typeof right}`)
-            left = operate(currOperator, left, right);
-            if (left === "Why?")
-                return "Don't divide by zero >:(";
-            // console.log(left)
-        }
+    else if (arr[0].split(".").length > 2) {
+        return "SYNTAX ERROR";
     }
+    
+    let left = +arr[0];
+    let currOperator = arr[1]
+    let right = +arr[2];
+    left = operate(currOperator, left, right);
+    if (left === "Why?")
+        return "Don't divide by zero >:(";
+    // for (let i = 1; i < arr.length; i++) {
+    //     // i+2 < arr.length
+    //     // grab operator, grab rhs, return to lhs
+    //     if (i % 2 !== 0) {
+    //         currOperator = arr[i];
+    //     }
+    //     else {
+    //         let right = +arr[i];
+    //         console.log(`left: ${left}, \nright: ${right}, \nop: ${currOperator}
+    //         \ntype-left: ${typeof left}, \ntype-right: ${typeof right}`)
+    //         left = operate(currOperator, left, right);
+    //         if (left === "Why?")
+    //             return "Don't divide by zero >:(";
+    //         // console.log(left)
+    //     }
+    // }
     return left;
 }
 
 function checkDuplicates(arr) {
-    let filtered = arr.filter((item) => item.split(".").length < 2
-|| item.split("-").length < 2);
+    console.log(`arr: ${arr[0].split(".")}`)
+    let filtered = arr.filter((item) => item.split(".").length <= 2
+|| item.split("-").length <= 2);
+console.log(`filtered: ${filtered}}`)
 if (filtered.length === arr.length)
     return true;
 return false;
@@ -78,19 +86,25 @@ return false;
 
 const screenText = document.querySelector(".screen");
 const calcBtn = document.querySelector(".bottom");
+let arr = [];
 
 calcBtn.addEventListener("click", (event) => {
     if (screenText.textContent === "SYNTAX ERROR" ||
         screenText.textContent === "Don't divide by zero >:(")
         screenText.textContent = "";
-    let arr = screenText.textContent.split(" ")
+
+    if (arr.length === 0) {
+        arr = screenText.textContent.split(" ")
         .filter((item) => item !== "" && item !== "\n");
-    console.log(arr);
-    // if (arr.length+1 % 3 == 0 && arr.length != 0) {
-    //     console.log(`check: ${arr}`);
-    //     screenText.textContent = setUp(arr);
-    // }
+    }
+    else {
+        arr = arr.join(" ").split(" ")
+        .filter((item) => item !== "" && item !== "\n");
+    }
+    
     let choice = `${event.target.id}`;
+    // console.log(`first: [${arr}]`);
+    
     switch (choice) {
         case "multiply":
             choice = " * ";
@@ -105,13 +119,12 @@ calcBtn.addEventListener("click", (event) => {
             choice = " - ";
             break;
         case "equal":
-            choice = ""
-            // console.log(setUp(screenText.textContent.split(" ")));
+            // console.log(arr);
             screenText.textContent = setUp(arr);
+            arr = [];
             return;
         case "dot":
             choice = "."
-            console.log(checkDuplicates(arr));
             break;
         case "sign":
             choice = "-"
@@ -119,15 +132,33 @@ calcBtn.addEventListener("click", (event) => {
         default:
             choice = `${choice}`
     }
-    
-    if (choice === "clear")
+
+    if (choice === "clear") {
         screenText.textContent = "";
-    else {
-        screenText.textContent += choice;
-        arr.push(choice);
+        arr = [];
     }
-    if (arr.length % 3 == 0 && arr.length != 0) {
-            console.log(`check: ${arr}`);
-            screenText.textContent = setUp(arr);
+    else {
+        if (arr.slice(-1)[0] !== "remove") {
+            // console.log(`add: ${arr}`);
+            screenText.textContent += choice;
         }
+        else {
+            screenText.textContent = choice;
+            // console.log(`remove: ${arr}`);
+            arr.pop();
+        }
+        if (!(isNaN(+arr.slice(-1)[0])) && (!(isNaN(+choice)) || choice === "."))
+            arr[arr.length - 1] += choice;
+        else
+            arr.push(choice);
+    }
+    // console.log(`second: [${arr}], choice: [${choice}]`);
+
+    if (arr.length % 4 == 0 && arr.length != 0) {
+            // console.log(`check: [${arr}]`);
+            let result = setUp(arr.slice(0, 3));
+            screenText.textContent = result;
+            arr = [result, arr.slice(-1), "remove"];
+        }
+    return;
 });
